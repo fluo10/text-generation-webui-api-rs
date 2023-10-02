@@ -1,6 +1,8 @@
+mod api;
 mod character;
 mod history;
 
+pub use api::RequestApi;
 pub use character::Character;
 pub use history::History;
 pub fn add(left: usize, right: usize) -> usize {

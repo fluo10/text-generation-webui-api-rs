@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug,Default, PartialEq, Serialize, Deserialize)]
 pub struct History {
     visible: Vec<(String, String)>,
 }
