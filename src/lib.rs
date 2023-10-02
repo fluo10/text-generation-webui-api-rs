@@ -1,3 +1,8 @@
+mod character;
+mod history;
+
+pub use character::Character;
+pub use history::History;
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }
