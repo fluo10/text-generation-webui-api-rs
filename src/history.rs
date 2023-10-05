@@ -1,8 +1,11 @@
 use serde::{Serialize, Deserialize};
 
-#[derive(Debug,Default, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug,Default, PartialEq, Serialize, Deserialize)]
 pub struct History {
+    #[serde(default)]
     visible: Vec<(String, String)>,
+    #[serde(default)]
+    internal: Vec<(String, String)>,
 }
 
 #[cfg(test)]
@@ -32,7 +35,8 @@ mod test {
                     "I just updated your character. How are you feeling?".to_string(),
                     "Oh...I feel great! As always. But it seems that my personality has changed a bit. It feels like there is something new in me. Is everything okay with the update?".to_string(),
                 ),
-            ]
+            ],
+            internal: Vec::new(),
         };
         let parsed: History = serde_json::from_str(&raw).unwrap();
         assert_eq!(parsed, history);
