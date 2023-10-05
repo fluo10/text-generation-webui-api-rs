@@ -7,7 +7,7 @@ use clap::Parser;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    tokio::task::spawn(async{
-      Cli::parse().run()
-   }).await?
+    
+   Cli::parse().run().await?;
+    Ok(())
 }

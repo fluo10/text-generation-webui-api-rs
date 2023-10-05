@@ -20,68 +20,118 @@ pub enum InstructionTemplate {
     VicunaV1_1
 }
 
-#[derive(Debug, Default, PartialEq,Serialize, Deserialize)]
+#[derive(Debug, Default,  PartialEq,Serialize, Deserialize)]
 pub struct ChatApiBuilder {
     pub user_input: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     max_new_tokens: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     auto_max_new_tokens: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     max_tokens_second: Option<i32>,
     
 
     //# Generation params. If 'preset' is set to different than 'None', the values
     // in presets/preset-name.yaml are used instead of the individual numbers.
+    #[serde(skip_serializing_if = "Option::is_none")]
     preset: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     do_sample: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     temperature: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     top_p: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     typical_p: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     epsilon_cutoff:Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     eta_cutoff: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     tfs: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     top_a: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     repetition_penalty: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     repetition_penalty_range: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     top_k: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     min_length: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     no_repeat_ngram_size: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     num_beams: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     penalty_alpha: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     length_penalty: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     early_stopping: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     mirostat_mode: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     mirostat_tau: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     mirostat_eta: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     grammar_string: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     guidance_scale: Option<f32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     negative_prompt: Option<String>,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
     seed: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     add_bos_token: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     truncation_length: Option<i32>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     ban_eos_token: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     custom_token_bans: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     skip_special_tokens: Option<bool>,
+    #[serde(skip_serializing_if = "Vec::is_empty")]
     stopping_strings: Vec<String>,
 
     // Fields for Chat mode 
+    #[serde(skip_serializing_if = "Option::is_none")]
     history: Option<History>,
-    mode: Option<ChatMode>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     character: Option<String>,
-    instruction_template: Option<InstructionTemplate>, // Will get autodetected if unset
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instruction_template: Option<String>, // Will get autodetected if unset
+    #[serde(skip_serializing_if = "Option::is_none")]
     your_name: Option<String>,
 
+    #[serde(skip_serializing_if = "Option::is_none")]
     name1: Option<String>, // 'name of user', # Optional
+    #[serde(skip_serializing_if = "Option::is_none")]
     name2: Option<String>, //'name of character', # Optional
+    #[serde(skip_serializing_if = "Option::is_none")]
     context: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     greeting: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     name1_instruct: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     name2_instruct: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     context_instruct: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     turn_template: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     regenerate: Option<bool>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     #[serde(rename="_continue")]
     cont: Option<bool>,
-    chat_instruct_command: Option<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub chat_instruct_command: Option<String>,
 }
 
 impl ChatApiBuilder{
@@ -122,11 +172,10 @@ impl ChatApiBuilder{
             ..self
         }
     }
-    #[tokio::main]
     pub async fn request(self, url: &str) -> Result<reqwest::Response> {
         let endpoint_path= "api/v1/chat";
+        println!("{:?}", serde_json::to_string(&self)?);
         let endpoint = Url::parse(url)?.join(endpoint_path)?;
-
         let client = reqwest::Client::new();
         let response = client.post(endpoint)
             .body(serde_json::to_string(&self)?)
