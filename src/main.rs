@@ -1,4 +1,4 @@
-use text_generation_webui_chat_rs::{Result, Cli};
+use text_generation_webui_api::{Result, Cli};
 use std::path::PathBuf;
 
 use clap::Parser;
