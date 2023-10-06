@@ -3,9 +3,9 @@ use serde::{Serialize, Deserialize};
 #[derive(Clone, Debug,Default, PartialEq, Serialize, Deserialize)]
 pub struct History {
     #[serde(default)]
-    visible: Vec<(String, String)>,
+    pub visible: Vec<(String, String)>,
     #[serde(default)]
-    internal: Vec<(String, String)>,
+    pub internal: Vec<(String, String)>,
 }
 
 #[cfg(test)]
