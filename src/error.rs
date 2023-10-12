@@ -18,9 +18,6 @@ pub enum Error {
     ParseUrl(url::ParseError),
     #[error("anyhow")]
     Unknown(anyhow::Error),
-    #[cfg(feature="cli")]
-    #[error("Command parse error")]
-    Cli(clap::Error),
 }
 
 impl From<tokio::task::JoinError> for Error {
@@ -54,10 +51,3 @@ impl From<url::ParseError> for Error {
         Self::ParseUrl(e)
     }
 }
-#[cfg(feature="cli")]
-impl From<clap::Error> for Error {
-    fn from(e: clap::Error) -> Self {
-        Self::Cli(e)
-    }
-}
-

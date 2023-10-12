@@ -6,7 +6,7 @@ use common::CommonArgs;
 use chat::ChatArgs;
 //use model::ModelArgs;
 
-use crate::Result;
+use anyhow::Result;
 
 use clap::{Parser, Subcommand};
 

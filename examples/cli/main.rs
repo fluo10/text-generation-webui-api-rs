@@ -1,4 +1,10 @@
-use text_generation_webui_api::{Result, Cli};
+extern crate clap;
+extern crate anyhow;
+mod cli;
+
+
+use cli::Cli;
+use anyhow::Result;
 use std::path::PathBuf;
 
 use clap::Parser;

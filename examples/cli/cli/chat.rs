@@ -1,4 +1,4 @@
-use crate::{ChatApi, Character, History, Result};
+use text_generation_webui_api::{ChatApi, Character, History};
 use super::common::CommonArgs;
 
 use std::fmt::Display;
@@ -6,6 +6,7 @@ use std::fs;
 use std::path::PathBuf;
 
 use clap::Args;
+use anyhow::Result;
 
 #[derive(Args)]
 pub struct ChatArgs {
