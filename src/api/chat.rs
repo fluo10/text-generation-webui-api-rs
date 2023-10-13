@@ -172,15 +172,18 @@ impl ChatApiRequest{
             ..self
         }
     }
-    pub async fn send(self, url: &str) -> Result<reqwest::Response> {
+    pub async fn send(self, url: &str) -> Result<ChatApiResponse> {
         let endpoint_path= "api/v1/chat";
         println!("{:?}", serde_json::to_string(&self)?);
         let endpoint = Url::parse(url)?.join(endpoint_path)?;
         let client = reqwest::Client::new();
         let response = client.post(endpoint)
             .body(serde_json::to_string(&self)?)
-            .send().await?;
-        Ok(response)
+            .send().await?
+            .text().await?;
+        
+
+        Ok(serde_json::from_str(&response)?)
     }
 
 }

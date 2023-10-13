@@ -47,15 +47,16 @@ impl ModelApiRequest {
         }
     }
 
-    pub async fn send(self, url: &str) -> Result<reqwest::Response> {
+    pub async fn send(self, url: &str) -> Result<ModelApiResponse> {
         let endpoint_path = "api/v1/model";
         println!("{:?}", serde_json::to_string(&self)?);
         let endpoint = Url::parse(url)?.join(endpoint_path)?;
         let client = reqwest::Client::new();
         let response = client.post(endpoint)
             .body(serde_json::to_string(&self)?)
-            .send().await?;
-        Ok(response)
+            .send().await?
+            .text().await?;
+        Ok(serde_json::from_str(&response)?)
     }
 }
 

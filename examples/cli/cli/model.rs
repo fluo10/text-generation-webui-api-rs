@@ -43,7 +43,7 @@ impl ModelInfoArgs {
     pub async fn run(self) -> Result<()> {
         let request = ModelApiRequest::info();
         let response = request.send(&self.host).await?;
-        println!("{:?}", response.text().await?);
+        println!("{:?}", response);
         Ok(())
     }
 }
@@ -60,7 +60,7 @@ impl ModelListArgs {
     pub async fn run(self) -> Result<()> {
         let request = ModelApiRequest::list();
         let response = request.send(&self.host).await?;
-        println!("{:?}", response.text().await?);
+        println!("{:?}", response);
         Ok(())
     }
 }
@@ -77,7 +77,7 @@ impl ModelLoadArgs {
     pub async fn run(self) -> Result<()> {
         let request = ModelApiRequest::load(&self.model_name);
         let response = request.send(&self.host).await?;
-        println!("{:?}", response.text().await?);
+        println!("{:?}", response);
         Ok(())
     }
 }

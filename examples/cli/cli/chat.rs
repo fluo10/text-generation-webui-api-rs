@@ -62,7 +62,7 @@ impl ChatArgs {
         }
         
         let response = api.send(&self.host).await?;
-        println!("{:?}", response.text().await?);
+        println!("{:?}", response);
         Ok(())
     }
     fn print_verbose(&self, s: &impl Display) -> () {
