@@ -1,10 +1,10 @@
 mod common;
 mod chat;
-//mod model;
+mod model;
 
 use common::CommonArgs;
 use chat::ChatArgs;
-//use model::ModelArgs;
+use model::ModelArgs;
 
 use anyhow::Result;
 
@@ -19,13 +19,14 @@ pub struct Cli {
 #[derive(Subcommand)]
 enum Command {
     Chat(ChatArgs),
- //   Model(ModelArgs),
+    Model(ModelArgs),
 }
 
 impl Cli {
     pub async fn run(self) -> Result<()> {
         match self.command {
-            Command::Chat(x) => x.run().await
+            Command::Chat(x) => x.run().await,
+            Command::Model(x) => x.run().await
         }
     }
 }

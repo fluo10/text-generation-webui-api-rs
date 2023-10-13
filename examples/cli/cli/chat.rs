@@ -1,4 +1,4 @@
-use text_generation_webui_api::{ChatApi, Character, History};
+use text_generation_webui_api::{ChatApiRequest, Character, History};
 use super::common::CommonArgs;
 
 use std::fmt::Display;
@@ -35,7 +35,7 @@ impl ChatArgs {
         &self.print_verbose(&"start".to_string());
 
         println!("run");
-        let mut api = ChatApi::default().user_input(&self.input);
+        let mut api = ChatApiRequest::default().user_input(&self.input);
         if let Some(x) = self.character.as_ref() {
             if x.ends_with(".yaml") || x.ends_with("yml") {
                 let data = fs::read_to_string(x)?;
@@ -61,8 +61,8 @@ impl ChatArgs {
             api.instruction_template = Some(x.to_string());
         }
         
-        let request = api.request(&self.host).await?;
-        println!("{:?}", request.text().await?);
+        let response = api.send(&self.host).await?;
+        println!("{:?}", response.text().await?);
         Ok(())
     }
     fn print_verbose(&self, s: &impl Display) -> () {

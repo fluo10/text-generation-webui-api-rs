@@ -1,5 +1,5 @@
 mod chat;
 mod model;
 
-pub use chat::ChatApi;
-pub use model::ModelApi;
+pub use chat::{ChatApiRequest, ChatApiResponse};
+pub use model::{ModelApiRequest, ModelApiResponse};

@@ -21,7 +21,7 @@ pub enum InstructionTemplate {
 }
 
 #[derive(Debug, Default,  PartialEq,Serialize, Deserialize)]
-pub struct ChatApi {
+pub struct ChatApiRequest {
     pub user_input: Option<String>,
     #[serde(skip_serializing_if = "Option::is_none")]
     max_new_tokens: Option<i32>,
@@ -134,7 +134,7 @@ pub struct ChatApi {
     pub chat_instruct_command: Option<String>,
 }
 
-impl ChatApi{
+impl ChatApiRequest{
     pub fn character_name(self, name: &str) -> Self{
         Self {
             character: Some(name.to_string()),
@@ -172,7 +172,7 @@ impl ChatApi{
             ..self
         }
     }
-    pub async fn request(self, url: &str) -> Result<reqwest::Response> {
+    pub async fn send(self, url: &str) -> Result<reqwest::Response> {
         let endpoint_path= "api/v1/chat";
         println!("{:?}", serde_json::to_string(&self)?);
         let endpoint = Url::parse(url)?.join(endpoint_path)?;
@@ -186,17 +186,17 @@ impl ChatApi{
 }
 
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ChatResponse {
-    results: Vec<ChatResponseResult>,
+pub struct ChatApiResponse {
+    results: Vec<ChatApiResponseResult>,
 }
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
-pub struct ChatResponseResult {
+pub struct ChatApiResponseResult {
         history: History
 }
 
-impl ChatResponse {
+impl ChatApiResponse {
     pub fn pop_history(&mut self) -> Option<History>{
-        let content: ChatResponseResult = self.results.pop()?;
+        let content: ChatApiResponseResult = self.results.pop()?;
         Some(content.history)
     }
 }
@@ -207,7 +207,7 @@ mod test {
     #[test]
     fn parse_response() {
         let json = "{\"results\": [{\"history\": {\"internal\": [[\"Hello\", \"Good morning! How may I assist you today?\"]], \"visible\": [[\"Hello\", \"Good morning! How may I assist you today?\"]]}}]}";
-        let mut response: ChatResponse = serde_json::from_str(json).unwrap();
+        let mut response: ChatApiResponse = serde_json::from_str(json).unwrap();
         let history: History = response.pop_history().unwrap();
         assert_eq!(history, History{
             internal: vec![(
