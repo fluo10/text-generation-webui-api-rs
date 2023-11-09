@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use std::ops::{Deref, DerefMut};
 
 #[derive(Clone, Debug,Default, PartialEq, Serialize, Deserialize)]
 pub struct History {
@@ -7,6 +8,46 @@ pub struct History {
     #[serde(default)]
     pub internal: Vec<(String, String)>,
 }
+
+impl History {
+    pub fn new() -> Self {
+        Self::default()
+    }
+
+    pub fn push(&mut self, value: (&str, &str)) {
+        let (user, agent) = value;
+        self.visible.push((user.to_string(),agent.to_string()));
+        self.internal.push((user.to_string(),agent.to_string()));
+    }
+
+    pub fn pop(&mut self) -> Option<(String,String)> {
+        let _ = self.internal.pop();
+        self.visible.pop()
+    }
+
+    pub fn last_prompt(&self) -> Option<String> {
+        Some(self.visible.last()?.0.clone())
+    }
+
+    pub fn last_reply(&self) -> Option<String> {
+        Some(self.visible.last()?.1.clone())
+    }
+}
+
+impl Deref for History {
+    type Target = [(String, String)];
+    fn deref(&self) -> &Self::Target {
+        self.visible.deref()
+    }
+}
+
+impl DerefMut for History {
+    fn deref_mut(&mut self) -> &mut [(String, String)] {
+        self.visible.deref_mut()
+    }
+}
+        
+
 
 #[cfg(test)]
 mod test {
